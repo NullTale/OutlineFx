@@ -1,0 +1,18 @@
+{
+    "name": "Outline.Editor",
+    "rootNamespace": "",
+    "references": [
+        "GUID:bdbbf3324f8e871489bfc4305a67110a"
+    ],
+    "includePlatforms": [
+        "Editor"
+    ],
+    "excludePlatforms": [],
+    "allowUnsafeCode": false,
+    "overrideReferences": false,
+    "precompiledReferences": [],
+    "autoReferenced": true,
+    "defineConstraints": [],
+    "versionDefines": [],
+    "noEngineReferences": false
+}
