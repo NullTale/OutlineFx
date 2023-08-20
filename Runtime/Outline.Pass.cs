@@ -4,7 +4,6 @@ using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 using Random = UnityEngine.Random;
-using RendererList = UnityEngine.Rendering.RendererList;
 
 namespace UrpOutline
 {
