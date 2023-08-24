@@ -10,7 +10,9 @@ namespace UrpOutline
 {
     public partial class OutlineFeature : ScriptableRendererFeature
     {
-        private const string k_OutlineShader  = "Hidden/Outline/Outline";
+        private const string k_OutlineShader = "Hidden/Outline/Outline";
+        
+        private const Filter k_Filter = Filter.Box;
 		
         private static readonly int s_MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int s_ColorId   = Shader.PropertyToID("_Color");
@@ -22,25 +24,26 @@ namespace UrpOutline
 
 
         [SerializeField]
-        private RenderPassEvent      _event = RenderPassEvent.AfterRenderingPostProcessing;
-		
+        private RenderPassEvent _event = RenderPassEvent.AfterRenderingPostProcessing;
         [Range(0, 1)]
         [SerializeField]
-        private float                _alpha = .5f;
-        [Range(0, 1)]
-        [SerializeField]
-        private float                _solid;
+        private float  _solid;
 
         [Range(0, 0.007f)]
-        public  float        _thikness = 0.001f;
+        public  float  _thickness = 0.001f;
+        [Range(0, 1)]
+        [SerializeField]
+        private float    _alphaCutout = .5f;
 
-        public  Mode     _mode   = Mode.Hard;
-        public  Filter   _filter = Filter.Box;
+        public  Mode   _mode   = Mode.Hard;
+
+        
+        public bool      _attachDepth = true;
         
         public Optional<string> _output = new Optional<string>("_Tex", false);
-        public bool     _attachDepth = true;
         
-        public AlphaMask _alphaMask;
+        public AlphaMask _solidMask;
+        
         [SerializeField]
         private ShaderCollection     _shaders = new ShaderCollection();
         
@@ -157,8 +160,8 @@ namespace UrpOutline
                 return;
             
             var aspect = Screen.width / (float)Screen.height;
-            _step.x = _thikness / aspect;
-            _step.y = _thikness;
+            _step.x = _thickness / aspect;
+            _step.y = _thickness;
             if (_mode == Mode.Soft)
                 _step *= 2f;
             
@@ -185,7 +188,7 @@ namespace UrpOutline
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            switch (_filter)
+            switch (k_Filter)
             {
                 case Filter.Cross:
                     _outlineMat.EnableKeyword("CROSS");
@@ -196,7 +199,7 @@ namespace UrpOutline
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            if (_alphaMask._enable)
+            if (_solidMask._enable)
             {
                 _outlineMat.EnableKeyword("ALPHA_MASK");
             }

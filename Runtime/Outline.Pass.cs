@@ -42,20 +42,20 @@ namespace UrpOutline
                 desc.colorFormat = RenderTextureFormat.ARGB32;
                 _buffer.Get(cmd, desc);
                 
-                _owner._outlineMat.SetFloat(s_Alpha, _owner._alpha);
+                _owner._outlineMat.SetFloat(s_Alpha, _owner._alphaCutout);
                 _owner._outlineMat.SetFloat(s_Solid, _owner._solid);
                 
-                if (_owner._alphaMask._enable)
+                if (_owner._solidMask._enable)
                 {
-                    _owner._outlineMat.SetTexture(s_AlphaTex, _owner._alphaMask._texture);
-                    var xPeriod = 1f / (_owner._alphaMask._velocity.x / 1000f);
-                    var yPeriod = 1f / (_owner._alphaMask._velocity.y / 1000f);
-                    var xOffset = _owner._alphaMask._velocity.x == 0 ? 0 : (Time.unscaledTime % xPeriod) / xPeriod * _owner._alphaMask._scale;
-                    var yOffset = _owner._alphaMask._velocity.y == 0 ? 0 : (Time.unscaledTime % yPeriod) / yPeriod * _owner._alphaMask._scale;
+                    _owner._outlineMat.SetTexture(s_AlphaTex, _owner._solidMask._texture);
+                    var xPeriod = 1f / (_owner._solidMask._velocity.x / 1000f);
+                    var yPeriod = 1f / (_owner._solidMask._velocity.y / 1000f);
+                    var xOffset = _owner._solidMask._velocity.x == 0 ? 0 : (Time.unscaledTime % xPeriod) / xPeriod * _owner._solidMask._scale;
+                    var yOffset = _owner._solidMask._velocity.y == 0 ? 0 : (Time.unscaledTime % yPeriod) / yPeriod * _owner._solidMask._scale;
                     
-                    var aspectTex = _owner._alphaMask._texture.width / (float)_owner._alphaMask._texture.height;
+                    var aspectTex = _owner._solidMask._texture.width / (float)_owner._solidMask._texture.height;
                     
-                    _owner._outlineMat.SetVector(s_AlphaTO, new Vector4(_owner._alphaMask._scale * (Screen.width / (float)Screen.height) / aspectTex, _owner._alphaMask._scale, xOffset, yOffset));
+                    _owner._outlineMat.SetVector(s_AlphaTO, new Vector4(_owner._solidMask._scale * (Screen.width / (float)Screen.height) / aspectTex, _owner._solidMask._scale, xOffset, yOffset));
                 }
                 
 #if !UNITY_2022_1_OR_NEWER
