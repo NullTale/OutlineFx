@@ -5,8 +5,12 @@ Works with 2D and does not require to use special material.<br>
 Has customization options such as:<br>
 Edge softness, shape fill and mask with its animation
 
-
 ![A](https://github.com/NullTale/OutlineFx/assets/1497430/d6367587-2203-47e7-8a13-6d16195f2adc)
+
+
+Outline effect is achieved in such a way that selected objects are first rendered into a texture.<br>
+Then this texture, or rather the edges of objects on this texture are drawn over the main texture.<br>
+Optionally, outline can be drawn in a separate texture, and then used through the shader.
 
 # Usage
 Unity PackageManager url
