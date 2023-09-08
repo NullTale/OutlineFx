@@ -1,15 +1,25 @@
-#nullable enable
-using System;
 using UnityEngine;
 
-namespace UrpOutline
+namespace OutlineFx
 {
-    [ExecuteAlways]
-    public class Outline : MonoBehaviour
+    [ExecuteAlways] [DisallowMultipleComponent]
+    public class OutlineFx : MonoBehaviour
     {
         public   Color    _color = Color.magenta;
         internal Renderer _renderer;
+
+        public Color Color
+        {
+            get => _color;
+            set => _color = value;
+        }
         
+        public float Alpha
+        {
+            get => _color.a;
+            set => _color.a = value;
+        }
+
         // =======================================================================
         private void OnEnable()
         {
@@ -26,7 +36,7 @@ namespace UrpOutline
             }
 #endif
             
-            OutlineFeature.Render(this);
+            OutlineFxFeature.Render(this);
         }
     }
 }

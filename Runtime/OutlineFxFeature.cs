@@ -1,19 +1,16 @@
 using System;
 using System.Collections.Generic;
+using System.IO;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Random = UnityEngine.Random;
 
-namespace UrpOutline
+namespace OutlineFx
 {
-    public partial class OutlineFeature : ScriptableRendererFeature
+    public partial class OutlineFxFeature : ScriptableRendererFeature
     {
-        private const string k_OutlineShader = "Hidden/Outline/Outline";
-        
-        private const Filter k_Filter = Filter.Box;
-		
+        private const string k_OutlineShader = "Hidden/OutlineFx/Main";
+        		
         private static readonly int s_MainTexId = Shader.PropertyToID("_MainTex");
         private static readonly int s_ColorId   = Shader.PropertyToID("_Color");
 		
@@ -24,34 +21,40 @@ namespace UrpOutline
 
 
         [SerializeField]
+        [Tooltip("When draw outline")]
         private RenderPassEvent _event = RenderPassEvent.AfterRenderingPostProcessing;
         [Range(0, 1)]
         [SerializeField]
+        [Tooltip("Solid fill of outline")]
         private float  _solid;
 
         [Range(0, 0.007f)]
+        [Tooltip("Outline thickness")]
         public  float  _thickness = 0.001f;
         [Range(0, 1)]
         [SerializeField]
-        private float    _alphaCutout = .5f;
+        [Tooltip("Alpha cutout threshold for transparent objects")]
+        private float  _alphaCutout = .5f;
 
+        [Tooltip("Edge filter")]
         public  Mode   _mode   = Mode.Hard;
-
+        [HideInInspector]
+        public Filter  _filter = Filter.Box;
+        [HideInInspector]
+        public bool    _attachDepth = true;
         
-        public bool      _attachDepth = true;
+        public Optional<string> _output = new Optional<string>("_globalTex", false);
         
-        public Optional<string> _output = new Optional<string>("_Tex", false);
+        public SolidMask _solidMask = new SolidMask();
         
-        public AlphaMask _solidMask;
-        
-        [SerializeField]
-        private ShaderCollection     _shaders = new ShaderCollection();
+        [SerializeField] [HideInInspector]
+        public Shader _shader;
         
         private Material _outlineMat;
         private Vector4  _step;
         private Pass     _pass;
         
-        private static List<Outline> _renderers = new List<Outline>();
+        private static List<OutlineFx> _renderers = new List<OutlineFx>();
 
         // =======================================================================
         public class RenderTarget
@@ -95,17 +98,11 @@ namespace UrpOutline
         }
 
         [Serializable]
-        public class ShaderCollection
+        public class SolidMask
         {
-            public Shader _outline;
-        }
-
-        [Serializable]
-        public class AlphaMask
-        {
-            public bool      _enable;
-            public Texture2D _texture;
-            public float     _scale = 33f;
+            public bool      _enabled;
+            public Texture2D _pattern;
+            public float     _scale = 50f;
             public Vector2   _velocity = new Vector2(0, 0);
         }
         
@@ -124,13 +121,13 @@ namespace UrpOutline
         // =======================================================================
         public override void Create()
         {
+            
             _pass = new Pass() { _owner = this };
             _pass.Init();
             _renderers.Clear();
             
-            _validateShaders();
-			
-            _initMaterials();
+            _validateContent();
+            _validateMaterial();
 			
             if (k_ScreenMesh == null)
             {
@@ -168,15 +165,15 @@ namespace UrpOutline
             renderer.EnqueuePass(_pass);
         }
 
-        public static void Render(Outline inst)
+        public static void Render(OutlineFx inst)
         {
             _renderers.Add(inst);
         }
         
         // =======================================================================
-        private void _initMaterials()
+        private void _validateMaterial()
         {
-            _outlineMat = new Material(_shaders._outline);
+            _outlineMat = new Material(_shader);
             switch (_mode)
             {
                 case Mode.Soft:
@@ -188,7 +185,8 @@ namespace UrpOutline
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            switch (k_Filter)
+            
+            switch (_filter)
             {
                 case Filter.Cross:
                     _outlineMat.EnableKeyword("CROSS");
@@ -199,26 +197,26 @@ namespace UrpOutline
                 default:
                     throw new ArgumentOutOfRangeException();
             }
-            if (_solidMask._enable)
+            
+            if (_solidMask._enabled)
             {
                 _outlineMat.EnableKeyword("ALPHA_MASK");
             }
         }
         
-        private void _validateShaders()
+        private void _validateContent()
         {
 #if UNITY_EDITOR
-            _validate(ref _shaders._outline, k_OutlineShader);
+            if (_shader == null)
+                _shader = Shader.Find(k_OutlineShader);
 			
-            UnityEditor.EditorUtility.SetDirty(this);
-            // -----------------------------------------------------------------------
-            void _validate(ref Shader shader, string path)
+            if (_solidMask._pattern == null)
             {
-                if (shader != null)
-                    return;
-				
-                shader = Shader.Find(path);
+                var dir = Path.GetDirectoryName(UnityEditor.AssetDatabase.GetAssetPath(_shader));
+                _solidMask._pattern = UnityEditor.AssetDatabase.LoadAssetAtPath<Texture2D>($"{dir}\\checker.png");
             }
+            
+            UnityEditor.EditorUtility.SetDirty(this);
 #endif
         }
 		

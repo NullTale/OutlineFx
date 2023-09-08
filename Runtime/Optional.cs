@@ -1,7 +1,7 @@
 using System;
 using UnityEngine;
 
-namespace UrpOutline
+namespace OutlineFx
 {
     [Serializable]
     public sealed class Optional<T>

@@ -1,13 +1,10 @@
-using System;
 using UnityEngine;
-using UnityEngine.Experimental.Rendering;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
-using Random = UnityEngine.Random;
 
-namespace UrpOutline
+namespace OutlineFx
 {
-    public partial class OutlineFeature
+    public partial class OutlineFxFeature
     {
         private static readonly int s_Alpha   = Shader.PropertyToID("_Alpha");
         private static readonly int s_MainTex = Shader.PropertyToID("_MainTex");
@@ -20,7 +17,7 @@ namespace UrpOutline
         
         private class Pass : ScriptableRenderPass
         {
-            public OutlineFeature _owner;
+            public OutlineFxFeature _owner;
             
             private FilteringSettings       _filtering;
             private RenderStateBlock        _override;
@@ -37,7 +34,7 @@ namespace UrpOutline
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
             {
                 // allocate resources
-                var cmd  = CommandBufferPool.Get(nameof(OutlineFeature));
+                var cmd  = CommandBufferPool.Get(nameof(OutlineFxFeature));
                 var desc = renderingData.cameraData.cameraTargetDescriptor;
                 desc.colorFormat = RenderTextureFormat.ARGB32;
                 _buffer.Get(cmd, desc);
@@ -45,17 +42,18 @@ namespace UrpOutline
                 _owner._outlineMat.SetFloat(s_Alpha, _owner._alphaCutout);
                 _owner._outlineMat.SetFloat(s_Solid, _owner._solid);
                 
-                if (_owner._solidMask._enable)
+                if (_owner._solidMask._enabled)
                 {
-                    _owner._outlineMat.SetTexture(s_AlphaTex, _owner._solidMask._texture);
-                    var xPeriod = 1f / (_owner._solidMask._velocity.x / 1000f);
-                    var yPeriod = 1f / (_owner._solidMask._velocity.y / 1000f);
-                    var xOffset = _owner._solidMask._velocity.x == 0 ? 0 : (Time.unscaledTime % xPeriod) / xPeriod * _owner._solidMask._scale;
-                    var yOffset = _owner._solidMask._velocity.y == 0 ? 0 : (Time.unscaledTime % yPeriod) / yPeriod * _owner._solidMask._scale;
+                    var sm = _owner._solidMask;
+                    _owner._outlineMat.SetTexture(s_AlphaTex, sm._pattern);
+                    var xPeriod = 1f / (sm._velocity.x / 1000f);
+                    var yPeriod = 1f / (sm._velocity.y / 1000f);
+                    var xOffset = sm._velocity.x == 0 ? 0 : (Time.unscaledTime % xPeriod) / xPeriod * sm._scale;
+                    var yOffset = sm._velocity.y == 0 ? 0 : (Time.unscaledTime % yPeriod) / yPeriod * sm._scale;
                     
-                    var aspectTex = _owner._solidMask._texture.width / (float)_owner._solidMask._texture.height;
+                    var aspectTex = sm._pattern.width / (float)sm._pattern.height;
                     
-                    _owner._outlineMat.SetVector(s_AlphaTO, new Vector4(_owner._solidMask._scale * (Screen.width / (float)Screen.height) / aspectTex, _owner._solidMask._scale, xOffset, yOffset));
+                    _owner._outlineMat.SetVector(s_AlphaTO, new Vector4(sm._scale * (Screen.width / (float)Screen.height) / aspectTex, sm._scale, xOffset, yOffset));
                 }
                 
 #if !UNITY_2022_1_OR_NEWER
@@ -93,7 +91,7 @@ namespace UrpOutline
                 foreach (var inst in _renderers)
                 {
                     cmd.SetGlobalTexture(s_MainTex, inst._renderer.sharedMaterial.mainTexture);
-                    cmd.SetGlobalColor(s_Color, inst._color);
+                    cmd.SetGlobalColor(s_Color, inst.Color);
                     cmd.DrawRenderer(inst._renderer, _owner._outlineMat, 0, 0);
                 }
                 _renderers.Clear();
@@ -106,7 +104,7 @@ namespace UrpOutline
                 // -----------------------------------------------------------------------
                 void _blit(RTHandle from, RTHandle to, Material mat, int pass = 0)
                 {
-                    OutlineFeature._blit(cmd, from, to, mat, pass);
+                    OutlineFxFeature._blit(cmd, from, to, mat, pass);
                 }
 
                 void _execute()

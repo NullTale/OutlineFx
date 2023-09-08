@@ -1,4 +1,4 @@
-Shader "Hidden/Outline/Outline"
+Shader "Hidden/OutlineFx/Main"
 {
     SubShader
     {
@@ -56,7 +56,7 @@ Shader "Hidden/Outline/Outline"
 			#define	BLUR_LENGTH_HALF ((BLUR_LENGTH - 1) / 2)
 			static const float	k_BlurWeights[BLUR_LENGTH] =
 			{
-				0.026995 * 2,
+				0.046995 * 2,
 				0.064759 * 2,
 				0.120985 * 2,
 				0.176033 * 2,
@@ -64,7 +64,7 @@ Shader "Hidden/Outline/Outline"
 				0.176033 * 2,
 				0.120985 * 2,
 				0.064759 * 2,
-				0.026995 * 2,
+				0.046995 * 2,
 			};
 
             sampler2D _MainTex;

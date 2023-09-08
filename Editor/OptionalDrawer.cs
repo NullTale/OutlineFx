@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-namespace UrpOutline.Editor
+namespace OutlineFx.Editor
 {
     [CustomPropertyDrawer(typeof(Optional<>))]
     public class OptionalDrawer : PropertyDrawer
@@ -20,6 +20,11 @@ namespace UrpOutline.Editor
             var valueProperty   = property.FindPropertyRelative("value");
             var enabledProperty = property.FindPropertyRelative("enabled");
 
+            OnGui(position, label, enabledProperty, valueProperty);
+        }
+
+        public static void OnGui(Rect position, GUIContent label, SerializedProperty enabledProperty, SerializedProperty valueProperty)
+        {
             position.width -= k_ToggleWidth;
             using (new EditorGUI.DisabledGroupScope(!enabledProperty.boolValue))
                 EditorGUI.PropertyField(position, valueProperty, label, true);
