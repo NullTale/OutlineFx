@@ -1,24 +1,26 @@
 # OutlineFx
 
-Simplified screen space outline for Unity Urp.<br>
-Works with 2D and does not require to use special material.<br>
-Has customization options such as:<br>
-Edge softness, shape fill and mask with its animation
+Simplified screen-space outline for Unity Urp.<br>
+Supports transparency and does not require the use of special materials.<br>
+Includes customization options such as:<br>
+- Edge softness
+- Shape fill
+- Mask with its animation
 
 ![A](https://github.com/NullTale/OutlineFx/assets/1497430/d6367587-2203-47e7-8a13-6d16195f2adc)
 
+The outline effect is achieved in the following way: selected objects are first rendered into a texture.<br>
+Then, the edges of objects on this texture are drawn over the main texture.<br>
+Optionally, the outline can be drawn in a separate texture and then used through a shader.<br>
 
-Outline effect is achieved in such a way that selected objects are first rendered into a texture.<br>
-Then this texture, or rather the edges of objects on this texture are drawn over the main texture.<br>
-Optionally, outline can be drawn in a separate texture, and then used through the shader.
 
 # Usage
 Unity PackageManager url
 ```
 https://github.com/NullTale/OutlineFx.git
 ```
-Basically, all you need to do is add `OutlineFeature` to the Urp Renderer<br>
-and `Outline` script to the object you want to outline.<br>
+Basically, all you need to do is add `OutlineFxFeature` to the Urp Renderer<br>
+and `OutlineFx` script to the object you want to outline.<br>
 
 That's it, the outline settings are common for all objects,<br>
 you can also customize the outline shape, fill and its texture.
