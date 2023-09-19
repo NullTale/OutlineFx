@@ -1,5 +1,6 @@
 using UnityEngine;
 
+//  OutlineFx © NullTale - https://twitter.com/NullTale/
 namespace OutlineFx
 {
     [ExecuteAlways] [DisallowMultipleComponent]

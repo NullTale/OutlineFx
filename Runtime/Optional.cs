@@ -1,6 +1,7 @@
 using System;
 using UnityEngine;
 
+//  OutlineFx © NullTale - https://twitter.com/NullTale/
 namespace OutlineFx
 {
     [Serializable]

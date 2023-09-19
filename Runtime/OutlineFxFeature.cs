@@ -5,6 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
+//  OutlineFx © NullTale - https://twitter.com/NullTale/
 namespace OutlineFx
 {
     public partial class OutlineFxFeature : ScriptableRendererFeature

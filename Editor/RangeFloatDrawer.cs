@@ -1,6 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
+//  OutlineFx © NullTale - https://twitter.com/NullTale/
 namespace UrpOutline.Editor
 {
     [CustomPropertyDrawer(typeof(RangeFloat))]
