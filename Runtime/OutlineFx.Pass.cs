@@ -68,7 +68,7 @@ namespace OutlineFx
                 
                 // render with layer mask
                 cmd.SetRenderTarget(_buffer.Handle.nameID);
-                cmd.ClearRenderTarget(RTClearFlags.Color, Color.clear, 1f, 0);
+                cmd.ClearRenderTarget(false, true, Color.clear, 1f);
                 
                 if (_owner._attachDepth)
                 {
