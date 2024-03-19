@@ -39,7 +39,10 @@ namespace OutlineFx
                 var desc = renderingData.cameraData.cameraTargetDescriptor;
                 desc.colorFormat = RenderTextureFormat.ARGB32;
                 _buffer.Get(cmd, desc);
-                
+		
+                if (_owner._outlineMat == null)
+    			return;
+		    
                 _owner._outlineMat.SetFloat(s_Alpha, _owner._alphaCutout);
                 _owner._outlineMat.SetFloat(s_Solid, _owner._solid);
                 
