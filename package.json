@@ -1,9 +1,9 @@
 {
   "name": "www.nulltale.outlinefx",
   "displayName": "OutlineFx",
-  "version": "1.0.0",
+  "version": "1.1.0",
   "unity": "2021.3",
-  "description": "Outline render feature for Unity Urp",
+  "description": "Simplified Outline for Unity Urp",
   "documentationUrl": "https://github.com/NullTale/OutlineFx",
   "licensesUrl": "https://github.com/NullTale/OutlineFx/blob/master/LICENSE.md",
   "author": {
@@ -14,5 +14,12 @@
   "dependencies": {
     "com.unity.render-pipelines.universal": "12.1.11"
   },
-  "hideInEditor": false
+  "hideInEditor": false,
+  "samples": [
+      {
+          "displayName": "Samples",
+          "description": "Contains sample scene",
+          "path": "Samples~/"
+      }
+  ]
 }

@@ -5,7 +5,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-//  OutlineFx © NullTale - https://twitter.com/NullTale/
+//  OutlineFx © NullTale - https://x.com/NullTale/
 namespace OutlineFx
 {
     public partial class OutlineFxFeature : ScriptableRendererFeature
@@ -20,6 +20,34 @@ namespace OutlineFx
         
         public static Mesh ScreenMesh => k_ScreenMesh;
 
+        public float Solid
+        {
+            get => _solid;
+            set => _solid = Mathf.Clamp01(value);
+        }
+
+        public float Thickness
+        {
+            get => _thickness;
+            set => _thickness = Mathf.Clamp01(value);
+        }
+        
+        public bool Mask
+        {
+            get => _solidMask._enabled;
+            set
+            {
+                if (_solidMask._enabled == value)
+                    return;
+                    
+                _solidMask._enabled = value;
+                
+                if (_solidMask._enabled)
+                    _outlineMat.EnableKeyword("ALPHA_MASK");
+                else
+                    _outlineMat.DisableKeyword("ALPHA_MASK");
+            }
+        }
 
         [SerializeField]
         [Tooltip("When draw outline")]
@@ -29,7 +57,7 @@ namespace OutlineFx
         [Tooltip("Solid fill of outline")]
         private float  _solid;
 
-        [Range(0, 0.007f)]
+        [Range(0, 1f)]
         [Tooltip("Outline thickness")]
         public  float  _thickness = 0.001f;
         [Range(0, 1)]
@@ -55,7 +83,7 @@ namespace OutlineFx
         private Vector4  _step;
         private Pass     _pass;
         
-        private static List<OutlineFx> _renderers = new List<OutlineFx>();
+        private static List<Outline> _renderers = new List<Outline>();
 
         // =======================================================================
         public class RenderTarget
@@ -160,13 +188,14 @@ namespace OutlineFx
             var aspect = Screen.width / (float)Screen.height;
             _step.x = _thickness / aspect;
             _step.y = _thickness;
+            _step  *= 0.007f;
             if (_mode == Mode.Soft)
                 _step *= 2f;
             
             renderer.EnqueuePass(_pass);
         }
 
-        public static void Render(OutlineFx inst)
+        public static void Render(Outline inst)
         {
             _renderers.Add(inst);
         }

@@ -1,15 +1,14 @@
 using UnityEngine;
 
-//  OutlineFx © NullTale - https://twitter.com/NullTale/
+//  OutlineFx © NullTale - https://x.com/NullTale/
 namespace OutlineFx
 {
-    [ExecuteAlways] [DisallowMultipleComponent]
-    public class OutlineFx : MonoBehaviour
+    [ExecuteAlways]
+    public class OutlineFx : Outline
     {
-        public   Color    _color = Color.magenta;
-        internal Renderer _renderer;
+        public   Color    _color = Color.white;
 
-        public Color Color
+        public override Color Color
         {
             get => _color;
             set => _color = value;
@@ -19,25 +18,6 @@ namespace OutlineFx
         {
             get => _color.a;
             set => _color.a = value;
-        }
-
-        // =======================================================================
-        private void OnEnable()
-        {
-            _renderer = GetComponent<Renderer>();
-        }
-
-        private void OnWillRenderObject()
-        {
-#if UNITY_EDITOR
-            if (Application.isEditor && Equals(_renderer, null) == false)
-            {
-                if (TryGetComponent<Renderer>(out _renderer) == false)
-                    return;
-            }
-#endif
-            
-            OutlineFxFeature.Render(this);
         }
     }
 }

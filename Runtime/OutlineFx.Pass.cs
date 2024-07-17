@@ -2,7 +2,7 @@ using UnityEngine;
 using UnityEngine.Rendering;
 using UnityEngine.Rendering.Universal;
 
-//  OutlineFx © NullTale - https://twitter.com/NullTale/
+//  OutlineFx © NullTale - https://x.com/NullTale/
 namespace OutlineFx
 {
     public partial class OutlineFxFeature
@@ -41,7 +41,7 @@ namespace OutlineFx
                 _buffer.Get(cmd, desc);
 		
                 if (_owner._outlineMat == null)
-    			return;
+    			    return;
 		    
                 _owner._outlineMat.SetFloat(s_Alpha, _owner._alphaCutout);
                 _owner._outlineMat.SetFloat(s_Solid, _owner._solid);
@@ -94,9 +94,13 @@ namespace OutlineFx
                 
                 foreach (var inst in _renderers)
                 {
+                    if (inst == null)
+                        continue;
+                    
                     cmd.SetGlobalTexture(s_MainTex, inst._renderer.sharedMaterial.mainTexture);
                     cmd.SetGlobalColor(s_Color, inst.Color);
                     cmd.DrawRenderer(inst._renderer, _owner._outlineMat, 0, 0);
+                    
                 }
                 _renderers.Clear();
                 

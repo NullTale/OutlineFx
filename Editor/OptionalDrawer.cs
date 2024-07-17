@@ -1,7 +1,7 @@
 using UnityEditor;
 using UnityEngine;
 
-//  OutlineFx © NullTale - https://twitter.com/NullTale/
+//  OutlineFx © NullTale - https://x.com/NullTale/
 namespace OutlineFx.Editor
 {
     [CustomPropertyDrawer(typeof(Optional<>))]
