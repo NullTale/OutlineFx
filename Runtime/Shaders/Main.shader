@@ -1,3 +1,4 @@
+//  OutlineFx © NullTale - https://x.com/NullTale
 Shader "Hidden/OutlineFx/Main"
 {
     SubShader

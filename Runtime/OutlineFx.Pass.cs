@@ -23,13 +23,16 @@ namespace OutlineFx
             private FilteringSettings       _filtering;
             private RenderStateBlock        _override;
             private RenderTarget            _buffer;
+            private RenderTarget            _outputTex;
             private RTHandle                _output;
 
             // =======================================================================
             public void Init()
             {
                 renderPassEvent = _owner._event;
-                _buffer         = new RenderTarget().Allocate(nameof(_buffer));
+                _buffer    = new RenderTarget().Allocate(nameof(_buffer));
+                if (_owner._output.Enabled)
+                    _outputTex = new RenderTarget().Allocate(_owner._output.value);
             }
 
             public override void Execute(ScriptableRenderContext context, ref RenderingData renderingData)
@@ -67,7 +70,11 @@ namespace OutlineFx
 				_output = renderingData.cameraData.renderer.cameraColorTargetHandle;
 #endif
                 if (_owner._output.Enabled)
-                    _output = _alloc(_owner._output.Value);
+                {
+                    _outputTex.Get(cmd, desc);
+                    cmd.SetRenderTarget(_outputTex.Handle);
+                    cmd.ClearRenderTarget(false, true, Color.clear, 1f);
+                }
                 
                 // render with layer mask
                 cmd.SetRenderTarget(_buffer.Handle.nameID);
@@ -108,7 +115,7 @@ namespace OutlineFx
                 _renderers.Clear();
                 
                 cmd.SetGlobalVector(s_Step, _owner._step);
-                _blit(_buffer.Handle, _output, _owner._outlineMat, 1);
+                _blit(_buffer.Handle, _owner._output.Enabled ? _outputTex.Handle : _output, _owner._outlineMat, 1);
 
                 _execute();
 				
@@ -128,13 +135,13 @@ namespace OutlineFx
             public override void FrameCleanup(CommandBuffer cmd)
             {
                 _buffer.Release(cmd);
-                
+/*                
 #if !UNITY_2022_1_OR_NEWER
                 RTHandles.Release(_output);
 #else
                 if (_owner._output.Enabled)
                     RTHandles.Release(_output);
-#endif
+#endif*/
             }
         }
     }
