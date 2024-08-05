@@ -1,7 +1,7 @@
 # OutlineFx
-[![Twitter](https://img.shields.io/badge/Follow-Twitter?logo=X&color=red)](https://x.com/NullTale)
+[![Twitter](https://img.shields.io/badge/Twitter-Twitter?logo=X&color=red)](https://x.com/NullTale)
 [![Discord](https://img.shields.io/badge/Discord-Discord?logo=discord&color=white)](https://discord.gg/CkdQvtA5un)
-[![Boosty](https://img.shields.io/badge/Support-Boosty?logo=boosty&color=white)](https://boosty.to/nulltale)
+[![Boosty](https://img.shields.io/badge/Support-Boosty?logo=boosty&color=white)](https://boosty.to/nulltale/donate)
 
 
 Simplified screen-space outline for Unity Urp.<br>
