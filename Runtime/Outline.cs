@@ -9,6 +9,7 @@ namespace OutlineFx
         internal Renderer _renderer;
 
         public abstract Color Color {get; set; }
+        public virtual  Material Material { get; } = null;
         
         // =======================================================================
         private void OnEnable()
