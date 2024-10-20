@@ -3,13 +3,14 @@
 [![Discord](https://img.shields.io/badge/Discord-Discord?logo=discord&color=white)](https://discord.gg/CkdQvtA5un)
 [![Boosty](https://img.shields.io/badge/Support-Boosty?logo=boosty&color=white)](https://boosty.to/nulltale/donate)
 
-
 Simplified screen-space outline for Unity Urp.<br>
 Supports transparency and does not require the use of special materials.<br>
 Includes customization options such as:<br>
 - Edge softness
 - Shape fill
 - Mask with its animation
+
+Support developement https://boosty.to/nulltale/single-payment/donation/639461/target?share=target_link
 
 ![A](https://github.com/NullTale/OutlineFx/assets/1497430/d6367587-2203-47e7-8a13-6d16195f2adc)
 
