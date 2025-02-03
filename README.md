@@ -32,3 +32,9 @@ That's it, the outline settings are common for all objects,<br>
 you can also customize the outline shape, fill and its texture.
 
 ![B](https://github.com/NullTale/OutlineFx/assets/1497430/2d05e249-61dd-40e8-af98-cc3a645495c8)
+
+The texture source can also be output to a global texture <br>
+and used manually via a shader or processed with [VolFx](https://github.com/NullTale/VolFx)
+
+![ _cover](https://github.com/user-attachments/assets/5a95752e-e751-4377-b102-898415db8362)<br>
+> example demonstrates the VolFx flow effect applied to the outline source to simulate a fire effect.
