@@ -108,9 +108,12 @@ namespace OutlineFx
                     if (mat == null)
                         mat = _owner._outlineMat;
                         
-                    cmd.SetGlobalTexture(s_MainTex, inst._renderer.sharedMaterial.mainTexture);
-                    cmd.SetGlobalColor(s_Color, inst.Color);
-                    cmd.DrawRenderer(inst._renderer, mat, 0, 0);
+                    for (int i = 0; i < inst._renderer.sharedMaterials.Length; i++)
+                    {
+                        cmd.SetGlobalTexture(s_MainTex, inst._renderer.sharedMaterials[i].mainTexture);
+                        cmd.SetGlobalColor(s_Color, inst.Color);
+                        cmd.DrawRenderer(inst._renderer, _owner._outlineMat, i, 0);
+                    }
                 }
                 _renderers.Clear();
                 
