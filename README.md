@@ -11,8 +11,6 @@ Includes customization options such as:<br>
 - Shape fill
 - Mask with its animation
 
-Support developement https://boosty.to/nulltale/single-payment/donation/639461/target?share=target_link
-
 ![A](https://github.com/NullTale/OutlineFx/assets/1497430/d6367587-2203-47e7-8a13-6d16195f2adc)
 
 The outline effect is achieved in the following way: selected objects are first rendered into a texture.<br>
