@@ -81,6 +81,7 @@ namespace OutlineFx
         
         private Material _outlineMat;
         private Vector4  _step;
+        private Vector4  _unitStep;
         private Pass     _pass;
         
         private static List<Outline> _renderers = new List<Outline>();
@@ -185,13 +186,15 @@ namespace OutlineFx
             if (_renderers.Count == 0)
                 return;
             
+            // step for a thickness of 1, so per-object thickness overrides can scale it
             var aspect = Screen.width / (float)Screen.height;
-            _step.x = _thickness / aspect;
-            _step.y = _thickness;
-            _step  *= 0.007f;
+            _unitStep.x = 1f / aspect;
+            _unitStep.y = 1f;
+            _unitStep  *= 0.007f;
             if (_mode == Mode.Soft)
-                _step *= 2f;
-            
+                _unitStep *= 2f;
+            _step = _unitStep * _thickness;
+
             renderer.EnqueuePass(_pass);
         }
 
