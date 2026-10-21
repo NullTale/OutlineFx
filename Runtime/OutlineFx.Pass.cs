@@ -19,7 +19,8 @@ namespace OutlineFx
         
         private static readonly int s_AlphaTex    = Shader.PropertyToID("_AlphaTex");
         private static readonly int s_AlphaTO = Shader.PropertyToID("_AlphaTO");
-        
+        private static readonly int s_BaseMap = Shader.PropertyToID("_BaseMap");
+
         private class Pass : ScriptableRenderPass
         {
             public OutlineFxFeature _owner;
@@ -331,12 +332,31 @@ namespace OutlineFx
                 var materials = inst._renderer.sharedMaterials;
                 for (int i = 0; i < materials.Length; i++)
                 {
-                    cmd.SetGlobalTexture(s_MainTex, materials[i] != null && materials[i].mainTexture != null ? materials[i].mainTexture : Texture2D.whiteTexture);
+                    cmd.SetGlobalTexture(s_MainTex, _getMainTexture(materials[i]));
                     cmd.SetGlobalColor(s_Color, inst.Color);
                     cmd.DrawRenderer(inst._renderer, mat, i, 0);
                 }
 
                 return materials.Length > 0;
+            }
+
+
+            /// <summary>
+            /// Returns the texture used for alpha cutout without logging errors when the shader has no main texture
+            /// (cmd.SetGlobalTexture(s_MainTex logs an error if neither [MainTexture] nor _MainTex exists).
+            /// </summary>
+            private static Texture _getMainTexture(Material material)
+            {
+                if (material == null)
+                    return Texture2D.whiteTexture;
+
+                Texture tex = null;
+                if (material.HasTexture(s_MainTex))
+                    tex = material.GetTexture(s_MainTex);
+                else if (material.HasTexture(s_BaseMap))
+                    tex = material.GetTexture(s_BaseMap);
+
+                return tex != null ? tex : Texture2D.whiteTexture;
             }
 
             public override void OnCameraCleanup(CommandBuffer cmd)
