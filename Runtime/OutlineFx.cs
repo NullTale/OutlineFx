@@ -6,7 +6,8 @@ namespace OutlineFx
     [ExecuteAlways]
     public class OutlineFx : Outline
     {
-        public   Color    _color = Color.white;
+        [SerializeField]
+        private Color _color = Color.white;
 
         public override Color Color
         {
